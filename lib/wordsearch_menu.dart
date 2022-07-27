@@ -1,92 +1,85 @@
 import 'dart:core';
 
-import 'package:SuperHeroWordGame/wordsearch_widget.dart';
-import 'package:SuperHeroWordGame/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:super_hero_word_game/globals.dart';
+import 'package:super_hero_word_game/wordsearch_widget.dart';
 
 class WordSearchMenu extends StatefulWidget {
+  const WordSearchMenu({super.key});
+
   @override
-  _WordSearchMenu createState() => new _WordSearchMenu();
+  State<WordSearchMenu> createState() => _WordSearchMenu();
 }
 
 class _WordSearchMenu extends State<WordSearchMenu> {
-
   @override
   Widget build(BuildContext context) {
-    var appBarHeight = AppBar().preferredSize.height;
-    var paddingTop = MediaQuery.of(context).padding.top;
-    return new Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.black,
-          title: Text("WORDSEARCH"),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: const Text('WORDSEARCH'),
+      ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.black,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                difficultyButton('Easy', 1),
+                difficultyButton('Medium', 2),
+                difficultyButton('Hard', 3),
+                difficultyButton('Insane', 4),
+              ],
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-        body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: Colors.black,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        difficultyButton("Easy", 1),
-                        difficultyButton("Medium", 2),
-                        difficultyButton("Hard", 3),
-                        difficultyButton("Insane", 4),
-                      ]),
-                  Container(
-                    height: MediaQuery.of(context).size.height * .8,
-                    width: MediaQuery.of(context).size.width * .97,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          button("Iron Man", "ironman"),
-                          button("Black Panther", "blackpanther"),
-                          button("Guardians of the Galaxy",
-                              "guardiansofthegalaxy"),
-                          button("Spider Man", "spiderman"),
-                          button("Avengers", "avengers"),
-                          button("Captain America", "captainamerica"),
-                          button("Batman", "batman"),
-                          button("Venom", "venom"),
-                          button("Thor", "thor"),
-                        ],
-                        //),
-                      ),
-                      //padding: EdgeInsets.only(left: 0.02.sh, right: 0.02.sh),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .8,
+              width: MediaQuery.of(context).size.width * .97,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    button('Iron Man', 'ironman'),
+                    button('Black Panther', 'blackpanther'),
+                    button(
+                      'Guardians of the Galaxy',
+                      'guardiansofthegalaxy',
                     ),
-                  ),
-                ])));
+                    button('Spider Man', 'spiderman'),
+                    button('Avengers', 'avengers'),
+                    button('Captain America', 'captainamerica'),
+                    button('Batman', 'batman'),
+                    button('Venom', 'venom'),
+                    button('Thor', 'thor'),
+                  ],
+                  //),
+                ),
+                //padding: EdgeInsets.only(left: 0.02.sh, right: 0.02.sh),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   ElevatedButton difficultyButton(String text, int level) {
     return ElevatedButton(
-      child: Text(text),
       onPressed: () {
         difficulty = level;
         setState(() {});
       },
       style: difficulty != level
           ? ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white24))
+              backgroundColor: MaterialStateProperty.all(Colors.white24),
+            )
           : ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
             ),
+      child: Text(text),
     );
   }
 
@@ -102,14 +95,14 @@ class _WordSearchMenu extends State<WordSearchMenu> {
 
   void openCrossword() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => WordSearchWidget(),
+      MaterialPageRoute<void>(
+        builder: (context) => const WordSearchWidget(),
       ),
     );
   }
 
   Container getTile(String thisTitle, String imageFile) {
-    imageFile = "images/${imageFile}.jpeg";
+    final _imageFile = 'images/$imageFile.jpeg';
 
     return Container(
       height: 0.1 * MediaQuery.of(context).size.height,
@@ -130,7 +123,7 @@ class _WordSearchMenu extends State<WordSearchMenu> {
               height: 0.4 * MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(imageFile),
+                  image: AssetImage(_imageFile),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.3),
@@ -146,11 +139,12 @@ class _WordSearchMenu extends State<WordSearchMenu> {
             left: 0,
             child: Container(
               margin: EdgeInsets.only(
-                  left: 0.05 * MediaQuery.of(context).size.width,
-                  top: 0.04 * MediaQuery.of(context).size.height),
+                left: 0.05 * MediaQuery.of(context).size.width,
+                top: 0.04 * MediaQuery.of(context).size.height,
+              ),
               child: Text(
                 thisTitle.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   letterSpacing: 0.3,
                   wordSpacing: 1,

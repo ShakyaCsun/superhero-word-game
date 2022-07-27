@@ -1,4 +1,4 @@
-String categorySelection = "";
+String categorySelection = '';
 
 int difficulty = 1;
 
@@ -6,7 +6,7 @@ List<String> returnString = [];
 
 List<String> getWords(String category) {
   switch (category) {
-    case "guardiansofthegalaxy":
+    case 'guardiansofthegalaxy':
       returnString = [
         'starlord',
         'yondu',
@@ -24,7 +24,7 @@ List<String> getWords(String category) {
 
       returnString.shuffle();
       return returnString;
-    case "spiderman":
+    case 'spiderman':
       returnString = [
         'spiderman',
         'peter',
@@ -43,7 +43,7 @@ List<String> getWords(String category) {
       returnString.shuffle();
       return returnString;
 
-    case "avengers":
+    case 'avengers':
       returnString = [
         'thor',
         'captain',
@@ -57,16 +57,16 @@ List<String> getWords(String category) {
         'fury',
         'avengers',
         'wasp'
-
       ];
       if (difficulty >= 3) {
-        returnString.add('blackwidow');
-        returnString.add('blackpanther');
+        returnString
+          ..add('blackwidow')
+          ..add('blackpanther');
       }
       returnString.shuffle();
       return returnString;
 
-    case "captainamerica":
+    case 'captainamerica':
       returnString = [
         'captain',
         'america',
@@ -89,7 +89,7 @@ List<String> getWords(String category) {
       returnString.shuffle();
       return returnString;
 
-    case "batman":
+    case 'batman':
       returnString = [
         'batman',
         'robin',
@@ -111,7 +111,7 @@ List<String> getWords(String category) {
       returnString.shuffle();
       return returnString;
 
-    case "venom":
+    case 'venom':
       returnString = [
         'venom',
         'carnage',
@@ -127,12 +127,11 @@ List<String> getWords(String category) {
       ];
       if (difficulty >= 2) {
         returnString.add('experiment');
-
       }
       returnString.shuffle();
       return returnString;
 
-    case "ironman":
+    case 'ironman':
       returnString = [
         'ironman',
         'tony',
@@ -152,7 +151,7 @@ List<String> getWords(String category) {
       returnString.shuffle();
       return returnString;
 
-    case "thor":
+    case 'thor':
       returnString = [
         'thor',
         'loki',
@@ -173,7 +172,7 @@ List<String> getWords(String category) {
 
       returnString.shuffle();
       return returnString;
-    case "blackpanther":
+    case 'blackpanther':
       returnString = [
         'wakanda',
         'shuri',
@@ -189,15 +188,14 @@ List<String> getWords(String category) {
         'africa'
       ];
       if (difficulty >= 3) {
-        returnString.add('killmonger');
-        returnString.add('blackpanther');
+        returnString
+          ..add('killmonger')
+          ..add('blackpanther');
       }
 
       returnString.shuffle();
       return returnString;
-
   }
-
 
   return [];
 }

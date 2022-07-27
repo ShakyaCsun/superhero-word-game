@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:word_search/word_search.dart';
 
 class WordFind extends StatefulWidget {
-  WordFind({Key key}) : super(key: key);
+  const WordFind({super.key});
 
   @override
-  _WordFindState createState() => _WordFindState();
+  State<WordFind> createState() => _WordFindState();
 }
 
 class _WordFindState extends State<WordFind> {
@@ -16,31 +16,31 @@ class _WordFindState extends State<WordFind> {
 
   // make list question for puzzle
   // make class 1st
-  List<WordFindQues> listQuestions;
+  late List<WordFindQues> listQuestions;
 
   @override
   void initState() {
     super.initState();
     listQuestions = [
       WordFindQues(
-        question: "What is the name of this team?",
-        answer: "avengers",
-        pathImage: "avengers"
+        question: 'What is the name of this team?',
+        answer: 'avengers',
+        pathImage: 'avengers',
       ),
       WordFindQues(
-        question: "Who is this?",
-        answer: "venom",
-        pathImage: "venom"
+        question: 'Who is this?',
+        answer: 'venom',
+        pathImage: 'venom',
       ),
       WordFindQues(
-        question: "Who is this? ....... America",
-        answer: "captain",
-        pathImage: "captainamerica"
+        question: 'Who is this? ....... America',
+        answer: 'captain',
+        pathImage: 'captainamerica',
       ),
       WordFindQues(
-          question: "Who is this? Black .......",
-          answer: "panther",
-          pathImage: "blackpanther"
+        question: 'Who is this? Black .......',
+        answer: 'panther',
+        pathImage: 'blackpanther',
       )
       // let me find online image 1st
     ];
@@ -57,7 +57,7 @@ class _WordFindState extends State<WordFind> {
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return Container(
+                    return ColoredBox(
                       color: Colors.grey,
                       // lets make our word find widget
                       // sent list to our widget
@@ -70,16 +70,14 @@ class _WordFindState extends State<WordFind> {
                   },
                 ),
               ),
-              Container(
-                child: RaisedButton(
-                  onPressed: () {
-                    // reload btn test
-                    globalKey.currentState.generatePuzzle(
-                      loop: listQuestions.map((ques) => ques.clone()).toList(),
-                    );
-                  },
-                  child: Text("reload"),
-                ),
+              ElevatedButton(
+                onPressed: () {
+                  // reload btn test
+                  globalKey.currentState!.generatePuzzle(
+                    loop: listQuestions.map((ques) => ques.clone()).toList(),
+                  );
+                },
+                child: const Text('reload'),
               )
             ],
           ),
@@ -91,17 +89,18 @@ class _WordFindState extends State<WordFind> {
 
 // make statefull widget name WordFindWidget
 class WordFindWidget extends StatefulWidget {
-  Size size;
-  List<WordFindQues> listQuestions;
-  WordFindWidget(this.size, this.listQuestions, {Key key}) : super(key: key);
+  const WordFindWidget(this.size, this.listQuestions, {super.key});
+
+  final Size size;
+  final List<WordFindQues> listQuestions;
 
   @override
-  _WordFindWidgetState createState() => _WordFindWidgetState();
+  State<WordFindWidget> createState() => _WordFindWidgetState();
 }
 
 class _WordFindWidgetState extends State<WordFindWidget> {
-  Size size;
-  List<WordFindQues> listQuestions;
+  late Size size;
+  late List<WordFindQues> listQuestions;
   int indexQues = 0; // current index question
   int hintCount = 0;
 
@@ -119,20 +118,20 @@ class _WordFindWidgetState extends State<WordFindWidget> {
   Widget build(BuildContext context) {
     // lets make ui
     // let put current data on question
-    WordFindQues currentQues = listQuestions[indexQues];
+    final currentQues = listQuestions[indexQues];
     // print(currentQues);
 
-    return Container(
+    return SizedBox(
       width: double.maxFinite,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: () => generateHint(),
+                  onTap: generateHint,
                   child: Icon(
                     Icons.lightbulb,
                     size: 45,
@@ -165,24 +164,26 @@ class _WordFindWidgetState extends State<WordFindWidget> {
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Container(
                 alignment: Alignment.center,
                 constraints: BoxConstraints(
                   maxWidth: size.width / 2 * 1.5,
                   // maxHeight: size.width / 2.5,
                 ),
-                child: Image.asset('images/${currentQues.pathImage}.jpeg', fit: BoxFit.contain),
-
+                child: Image.asset(
+                  'images/${currentQues.pathImage}.jpeg',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             alignment: Alignment.center,
             child: Text(
-              "${currentQues.question ?? ''}",
-              style: TextStyle(
+              currentQues.question ?? '',
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -190,26 +191,25 @@ class _WordFindWidgetState extends State<WordFindWidget> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             alignment: Alignment.center,
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
                   children: currentQues.puzzles.map((puzzle) {
                     // later change color based condition
-                    Color color;
+                    Color? color;
 
-                    if (currentQues.isDone)
+                    if (currentQues.isDone) {
                       color = Colors.green[300];
-                    else if (puzzle.hintShow)
+                    } else if (puzzle.hintShow) {
                       color = Colors.yellow[100];
-                    else if (currentQues.isFull)
+                    } else if (currentQues.isFull) {
                       color = Colors.red;
-                    else
-                      color = Color(0xff7EE7FD);
+                    } else {
+                      color = const Color(0xff7EE7FD);
+                    }
 
                     return InkWell(
                       onTap: () {
@@ -229,10 +229,10 @@ class _WordFindWidgetState extends State<WordFindWidget> {
                         //height: constraints.biggest.width / 7 - 6,
                         width: constraints.biggest.width / 8 - 6,
                         height: constraints.biggest.width / 8 - 6,
-                        margin: EdgeInsets.all(3),
+                        margin: const EdgeInsets.all(3),
                         child: Text(
-                          "${puzzle.currentValue ?? ''}".toUpperCase(),
-                          style: TextStyle(
+                          (puzzle.currentValue ?? '').toUpperCase(),
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -245,11 +245,10 @@ class _WordFindWidgetState extends State<WordFindWidget> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             alignment: Alignment.center,
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 8,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
@@ -257,14 +256,14 @@ class _WordFindWidgetState extends State<WordFindWidget> {
               itemCount: 16, // later change
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                bool statusBtn = currentQues.puzzles
-                    .indexWhere((puzzle) => puzzle.currentIndex == index) >=
+                final statusBtn = currentQues.puzzles
+                        .indexWhere((puzzle) => puzzle.currentIndex == index) >=
                     0;
 
                 return LayoutBuilder(
                   builder: (context, constraints) {
-                    Color color =
-                    statusBtn ? Colors.white70 : Color(0xff7EE7FD);
+                    final color =
+                        statusBtn ? Colors.white70 : const Color(0xff7EE7FD);
 
                     return Container(
                       decoration: BoxDecoration(
@@ -273,11 +272,15 @@ class _WordFindWidgetState extends State<WordFindWidget> {
                       ),
                       // margin: ,
                       alignment: Alignment.center,
-                      child: FlatButton(
-                        height: constraints.biggest.height,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.fromHeight(
+                            constraints.biggest.height,
+                          ),
+                        ),
                         child: Text(
-                          "${currentQues.arrayBtns[index]}".toUpperCase(),
-                          style: TextStyle(
+                          currentQues.arrayBtns![index].toUpperCase(),
+                          style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -298,34 +301,36 @@ class _WordFindWidgetState extends State<WordFindWidget> {
   }
 
   void generatePuzzle({
-    List<WordFindQues> loop,
-    bool next: false,
-    bool left: false,
+    List<WordFindQues>? loop,
+    bool next = false,
+    bool left = false,
   }) {
     // lets finish up generate puzzle
     if (loop != null) {
       indexQues = 0;
-      this.listQuestions = new List<WordFindQues>();
-      this.listQuestions.addAll(loop);
+      listQuestions = <WordFindQues>[];
+      listQuestions.addAll(loop);
     } else {
-      if (next && indexQues < listQuestions.length - 1)
+      if (next && indexQues < listQuestions.length - 1) {
         indexQues++;
-      else if (left && indexQues > 0)
+      } else if (left && indexQues > 0) {
         indexQues--;
-      else if (indexQues >= listQuestions.length - 1) return;
+      } else if (indexQues >= listQuestions.length - 1) {
+        return;
+      }
 
       setState(() {});
 
-      if (this.listQuestions[indexQues].isDone) return;
+      if (listQuestions[indexQues].isDone) return;
     }
 
-    WordFindQues currentQues = listQuestions[indexQues];
+    final currentQues = listQuestions[indexQues];
 
     setState(() {});
 
-    final List<String> wl = [currentQues.answer];
+    final wl = <String>[currentQues.answer!];
 
-    final WSSettings ws = WSSettings(
+    final ws = WSSettings(
       width: 16, // total random word row we want use
       height: 1,
       orientations: List.from([
@@ -333,21 +338,22 @@ class _WordFindWidgetState extends State<WordFindWidget> {
       ]),
     );
 
-    final WordSearch wordSearch = WordSearch();
+    final wordSearch = WordSearch();
 
-    final WSNewPuzzle newPuzzle = wordSearch.newPuzzle(wl, ws);
+    final newPuzzle = wordSearch.newPuzzle(wl, ws);
 
     // check if got error generate random word
     if (newPuzzle.errors.isEmpty) {
-      currentQues.arrayBtns = newPuzzle.puzzle.expand((list) => list).toList();
-      currentQues.arrayBtns.shuffle(); // make shuffle so user not know answer
+      currentQues.arrayBtns = newPuzzle.puzzle!.expand((list) => list).toList();
+      currentQues.arrayBtns!.shuffle(); // make shuffle so user not know answer
 
-      bool isDone = currentQues.isDone;
+      final isDone = currentQues.isDone;
 
       if (!isDone) {
-        currentQues.puzzles = List.generate(wl[0].split("").length, (index) {
+        currentQues.puzzles = List.generate(wl[0].split('').length, (index) {
           return WordFindChar(
-              correctValue: currentQues.answer.split("")[index]);
+            correctValue: currentQues.answer!.split('')[index],
+          );
         });
       }
     }
@@ -356,28 +362,29 @@ class _WordFindWidgetState extends State<WordFindWidget> {
     setState(() {});
   }
 
-  generateHint() async {
+  Future<void> generateHint() async {
     // let dclare hint
-    WordFindQues currentQues = listQuestions[indexQues];
+    final currentQues = listQuestions[indexQues];
 
-    List<WordFindChar> puzzleNoHints = currentQues.puzzles
+    final puzzleNoHints = currentQues.puzzles
         .where((puzzle) => !puzzle.hintShow && puzzle.currentIndex == null)
         .toList();
 
-    if (puzzleNoHints.length > 0) {
+    if (puzzleNoHints.isNotEmpty) {
       hintCount++;
-      int indexHint = Random().nextInt(puzzleNoHints.length);
-      int countTemp = 0;
+      final indexHint = Random().nextInt(puzzleNoHints.length);
+      var countTemp = 0;
       // print("hint $indexHint");
 
       currentQues.puzzles = currentQues.puzzles.map((puzzle) {
         if (!puzzle.hintShow && puzzle.currentIndex == null) countTemp++;
 
         if (indexHint == countTemp - 1) {
-          puzzle.hintShow = true;
-          puzzle.currentValue = puzzle.correctValue;
-          puzzle.currentIndex = currentQues.arrayBtns
-              .indexWhere((btn) => btn == puzzle.correctValue);
+          puzzle
+            ..hintShow = true
+            ..currentValue = puzzle.correctValue
+            ..currentIndex = currentQues.arrayBtns!
+                .indexWhere((btn) => btn == puzzle.correctValue);
         }
 
         return puzzle;
@@ -390,7 +397,7 @@ class _WordFindWidgetState extends State<WordFindWidget> {
 
         setState(() {});
 
-        await Future.delayed(Duration(seconds: 1));
+        await Future<void>.delayed(const Duration(seconds: 1));
         generatePuzzle(next: true);
       }
 
@@ -400,22 +407,22 @@ class _WordFindWidgetState extends State<WordFindWidget> {
   }
 
   Future<void> setBtnClick(int index) async {
-    WordFindQues currentQues = listQuestions[indexQues];
+    final currentQues = listQuestions[indexQues];
 
-    int currentIndexEmpty =
-    currentQues.puzzles.indexWhere((puzzle) => puzzle.currentValue == null);
+    final currentIndexEmpty =
+        currentQues.puzzles.indexWhere((puzzle) => puzzle.currentValue == null);
 
     if (currentIndexEmpty >= 0) {
       currentQues.puzzles[currentIndexEmpty].currentIndex = index;
       currentQues.puzzles[currentIndexEmpty].currentValue =
-      currentQues.arrayBtns[index];
+          currentQues.arrayBtns![index];
 
       if (currentQues.fieldCompleteCorrect()) {
         currentQues.isDone = true;
 
         setState(() {});
 
-        await Future.delayed(Duration(seconds: 1));
+        await Future<void>.delayed(const Duration(seconds: 1));
         generatePuzzle(next: true);
       }
       setState(() {});
@@ -424,54 +431,50 @@ class _WordFindWidgetState extends State<WordFindWidget> {
 }
 
 class WordFindQues {
-  String question;
-  String pathImage;
-  String answer;
-  bool isDone = false;
-  bool isFull = false;
-  List<WordFindChar> puzzles = new List<WordFindChar>();
-  List<String> arrayBtns = new List<String>();
-
   WordFindQues({
     this.pathImage,
     this.question,
     this.answer,
     this.arrayBtns,
   });
+  String? question;
+  String? pathImage;
+  String? answer;
+  bool isDone = false;
+  bool isFull = false;
+  List<WordFindChar> puzzles = <WordFindChar>[];
+  List<String>? arrayBtns = <String>[];
 
-  void setWordFindChar(List<WordFindChar> puzzles) => this.puzzles = puzzles;
-
-  void setIsDone() => this.isDone = true;
+  void setIsDone() => isDone = true;
 
   bool fieldCompleteCorrect() {
     // lets declare class WordFindChar 1st
     // check all field already got value
     // fix color red when value not full but show red color
-    bool complete =
-        this.puzzles.where((puzzle) => puzzle.currentValue == null).length == 0;
+    final complete =
+        puzzles.where((puzzle) => puzzle.currentValue == null).isEmpty;
 
     if (!complete) {
       // no complete yet
-      this.isFull = false;
+      isFull = false;
       return complete;
     }
 
-    this.isFull = true;
+    isFull = true;
     // if already complete, check correct or not
 
-    String answeredString =
-    this.puzzles.map((puzzle) => puzzle.currentValue).join("");
+    final answeredString = puzzles.map((puzzle) => puzzle.currentValue).join();
 
     // if same string, answer is correct..yeay
-    return answeredString == this.answer;
+    return answeredString == answer;
   }
 
   // more prefer name.. haha
   WordFindQues clone() {
-    return new WordFindQues(
-      answer: this.answer,
-      pathImage: this.pathImage,
-      question: this.question,
+    return WordFindQues(
+      answer: answer,
+      pathImage: pathImage,
+      question: question,
     );
   }
 
@@ -480,27 +483,28 @@ class WordFindQues {
 
 // done
 class WordFindChar {
-  String currentValue;
-  int currentIndex;
-  String correctValue;
-  bool hintShow;
-
   WordFindChar({
     this.hintShow = false,
     this.correctValue,
     this.currentIndex,
     this.currentValue,
   });
+  String? currentValue;
+  int? currentIndex;
+  String? correctValue;
+  bool hintShow;
 
-  getCurrentValue() {
-    if (this.correctValue != null)
-      return this.currentValue;
-    else if (this.hintShow) return this.correctValue;
+  String? getCurrentValue() {
+    if (correctValue != null) {
+      return currentValue;
+    } else if (hintShow) {
+      return correctValue;
+    }
+    return null;
   }
 
   void clearValue() {
-    this.currentIndex = null;
-    this.currentValue = null;
+    currentIndex = null;
+    currentValue = null;
   }
 }
-
